@@ -25,7 +25,7 @@ class User(BaseMixin, db.Model):
         return f"<User '{self.email.title()}'>"
 
 
-class Fgu(BaseMixin, db.Model):
+class Fgu(db.Model):
     __tablename__ = 'fgu'
 
     __table_args__ = (db.PrimaryKeyConstraint('id_user', 'id_genre'),)
@@ -36,3 +36,16 @@ class Fgu(BaseMixin, db.Model):
 
     def __repr__(self):
         return f"<Fgu '{self.user.title() + self.genre.title()}'>"
+
+
+class Fmu(db.Model):
+    __tablename__ = 'fmu'
+
+    __table_args__ = (db.PrimaryKeyConstraint('id_user', 'id_movie'),)
+    id_user = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship('User')
+    id_movie = db.Column(db.Integer, db.ForeignKey('movie.id'))
+    movie = db.relationship('Movie')
+
+    def __repr__(self):
+        return f"<Fmu '{self.user.title() + self.movie.title()}'>"

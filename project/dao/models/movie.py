@@ -1,4 +1,4 @@
-from project.dao.models import BaseMixin
+from project.dao.models.base import BaseMixin
 from project.setup_db import db
 
 
@@ -17,5 +17,4 @@ class Movie(BaseMixin, db.Model):
 
     def __repr__(self):
         return F"<Movie '{self.title.title()}'>"
-
 
