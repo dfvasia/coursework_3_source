@@ -1,3 +1,5 @@
+from sqlalchemy import desc
+
 from project.dao.models import Movie
 
 
@@ -34,3 +36,11 @@ class MovieDAO:
     def delete(self, mid):
         movie = self.get_one(mid)
         self._db_session(movie)
+
+    def get_filter(self, limit: int, offset: int, status: str):
+        if limit > 0 and status == 'new':
+            return self._db_session.query(Movie).order_by(desc(Movie.year)).limit(limit).offset(offset).all()
+        elif limit > 0:
+            return self._db_session.query(Movie).limit(limit).offset(offset).all()
+        elif status == 'new':
+            return self._db_session.query(Movie).order_by(desc(Movie.year)).all()

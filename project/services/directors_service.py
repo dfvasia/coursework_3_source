@@ -14,3 +14,19 @@ class DirectorsService(BaseService):
     def get_all_movies(self):
         directors = DirectorDAO(self._db_session).get_all()
         return DirectorSchema(many=True).dump(directors)
+
+    def get_update(self, data):
+        did = data.get("id")
+        director = DirectorDAO(self._db_session).get_one(did)
+
+        director.name = data.get("name")
+
+        return DirectorSchema().dump(director)
+
+    def create(self, data):
+        director = DirectorDAO(self._db_session).create(data)
+        return DirectorSchema().dump(director)
+
+    def delete(self, did):
+        director = DirectorDAO(self._db_session).delete(did)
+        return DirectorSchema().dump(director)
