@@ -1,6 +1,7 @@
 from flask import request
-from flask_restx import Resource, Namespace, reqparse
+from flask_restx import Resource, Namespace, reqparse, abort
 # from flask_restful import reqparse
+from project.exceptions import ItemNotFound
 from project.services import MoviesService
 from project.setup_db import db
 from project.tools import login_required, admin_required
@@ -14,7 +15,6 @@ parser.add_argument('status', type=str)
 @movies_ns.route('/')
 class MoviesView(Resource):
     @movies_ns.expect(parser)
-    @login_required
     @movies_ns.response(200, "OK")
     def get(self):
         """Get all Movies"""
@@ -33,13 +33,16 @@ class MoviesView(Resource):
         return "", 201, {'location': s_t}
 
 
-@movies_ns.route('/<int:mid>')
+@movies_ns.route('/<int:movie_id>')
 class MoviesView(Resource):
-    @login_required
-    def get(self, mid: int):
-        movie = MoviesService(db.session).get_one(mid)
-
-        return MovieSchema().dump(movie), 200
+    """Get movie by id"""
+    @movies_ns.response(200, "OK")
+    @movies_ns.response(404, "movie not found")
+    def get(self, movie_id: int):
+        try:
+            return MoviesService(db.session).get_item_by_id(movie_id)
+        except ItemNotFound:
+            abort(404, message="movie not found")
 
     @admin_required
     def put(self, mid):
