@@ -7,5 +7,6 @@ from .movie import *
 from .director import *
 from .user import *
 from .genre import *
+from .models.user import *
 
-__all__ = ["MovieDAO", "DirectorDAO", "UserDAO", "GenreDAO"]
+__all__ = ["MovieDAO", "DirectorDAO", "UserDAO", "User", "GenreDAO"]

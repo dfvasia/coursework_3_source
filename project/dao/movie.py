@@ -18,6 +18,9 @@ class MovieDAO:
             genre_id = movie['genre_id']
             return self._db_session.query(Movie).filter(Movie.genre_id == genre_id).all()
 
+    def get_by_id(self, gid: int):
+        return self._db_session.query(Movie).filter(Movie.id == gid).one_or_none()
+
     def get_one(self, mid):
         return self._db_session.query(Movie).get(mid)
 

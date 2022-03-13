@@ -15,7 +15,7 @@ class User(BaseMixin, db.Model):
 
     username = db.Column(db.String)
     surname = db.Column(db.String)
-    email = db.Column(db.String, unique=True)
+    email = db.Column(db.String, unique=True, nullable=False)
     password_hash = db.Column(db.String)
     role_id = db.Column(db.String, db.ForeignKey("group.id"))
     role = db.relationship("Group")
@@ -30,9 +30,9 @@ class Fgu(db.Model):
 
     __table_args__ = (db.PrimaryKeyConstraint('id_user', 'id_genre'),)
     id_user = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship('User')
+    # user = db.relationship('User')
     id_genre = db.Column(db.Integer, db.ForeignKey('genre.id'))
-    genre = db.relationship('Genre')
+    # genre = db.relationship('Genre')
 
     def __repr__(self):
         return f"<Fgu '{self.user.title() + self.genre.title()}'>"
@@ -43,9 +43,9 @@ class Fmu(db.Model):
 
     __table_args__ = (db.PrimaryKeyConstraint('id_user', 'id_movie'),)
     id_user = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship('User')
+    # user = db.relationship('User')
     id_movie = db.Column(db.Integer, db.ForeignKey('movie.id'))
-    movie = db.relationship('Movie')
+    # movie = db.relationship('Movie')
 
     def __repr__(self):
         return f"<Fmu '{self.user.title() + self.movie.title()}'>"

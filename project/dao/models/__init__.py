@@ -4,4 +4,4 @@ from .user import User
 from .genre import Genre
 
 
-__all__ = [Movie, Director, User, Genre]
+__all__ = ["Movie", "Director", "User", "Genre"]
