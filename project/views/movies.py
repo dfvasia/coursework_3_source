@@ -1,6 +1,5 @@
 from flask import request
 from flask_restx import Resource, Namespace, reqparse, abort
-# from flask_restful import reqparse
 from project.exceptions import ItemNotFound
 from project.services import MoviesService
 from project.setup_db import db

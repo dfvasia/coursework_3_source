@@ -12,7 +12,7 @@ from project.setup_db import db
 auth_ns = Namespace('auth')
 
 
-@auth_ns.route('/')
+@auth_ns.route('/login')
 class AuthView(Resource):
     @genres_ns.response(201, "OK")
     @genres_ns.response(404, "User not found")
