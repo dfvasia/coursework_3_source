@@ -11,6 +11,8 @@ from project.setup_db import db
 from marshmallow import ValidationError
 from werkzeug.exceptions import BadRequest
 
+from ..tools import login_required
+
 auth_ns = Namespace('auth')
 
 
@@ -36,14 +38,13 @@ class AuthView(Resource):
             print(e)
             abort(400, message="Token not created")
 
-    def put(self):
+    @login_required
+    def put(self, token_data):
         """Update token"""
         try:
-            r_token = request.json.get('refresh_token')
-            data = jwt.JwtToken.decode_token(r_token)
-            if not data:
+            if not token_data:
                 abort(404)
-            token_data = jwt.JwtSchema().load({'user_id': data['user_id'], 'role': data['role']})
+            token_data = jwt.JwtSchema().load({'user_id': token_data['user_id'], 'role': token_data['role']})
             return jwt.JwtToken(token_data).get_tokens(), 201
         except ValidationError as e:
             print(str(e))
