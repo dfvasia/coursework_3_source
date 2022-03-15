@@ -31,8 +31,7 @@ class AuthView(Resource):
                 abort(404, message="User not found")
             token_data = jwt.JwtSchema().load({'user_id': user["id"], 'role': user["role_id"]})
             a = jwt.JwtToken(token_data).get_tokens()
-            b = UsersService(db.session).write_refresh_token(user["email"], a["refresh_token"])
-            print(b)
+            UsersService(db.session).write_refresh_token(user["email"], a["refresh_token"])
             return a
         except ValidationError as e:
             print(e)
@@ -45,7 +44,12 @@ class AuthView(Resource):
             if not token_data:
                 abort(404)
             token_data = jwt.JwtSchema().load({'user_id': token_data['user_id'], 'role': token_data['role']})
-            return jwt.JwtToken(token_data).get_tokens(), 201
+            b = UsersService(db.session).get_one(token_data['user_id'])
+            if b["refresh_token"] != request.headers.get("Authorization").split("Bearer ")[-1]:
+                return abort(403)
+            a = jwt.JwtToken(token_data).get_tokens()
+            UsersService(db.session).write_refresh_token(b["email"], a["refresh_token"])
+            return a, 201
         except ValidationError as e:
             print(str(e))
             abort(400)
