@@ -23,7 +23,7 @@ class UsersService(BaseService):
         if len(UserDAO(self._db_session).get_all()) == 0:
             count = 2
         user = UserDAO(self._db_session).create({"username": user["username"], "surname": user["surname"], "email": user["email"], "password_hash": get_password_hash(user["password"]), "role_id": count})
-        return UserSchema().dump(user)
+        return user
 
     def write_refresh_token(self, user_email: str, refresh_token: str):
         user = UserDAO(self._db_session).write_refresh_token(user_email, refresh_token)
