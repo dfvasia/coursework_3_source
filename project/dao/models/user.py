@@ -17,7 +17,7 @@ class User(BaseMixin, db.Model):
     surname = db.Column(db.String)
     email = db.Column(db.String, unique=True, nullable=False)
     password_hash = db.Column(db.String)
-    role_id = db.Column(db.String, db.ForeignKey("group.id"))
+    role_id = db.Column(db.Integer, db.ForeignKey("group.id"))
     role = db.relationship("Group")
     refresh_token = db.Column(db.String)
 

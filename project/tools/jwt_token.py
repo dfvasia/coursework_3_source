@@ -14,15 +14,15 @@ class JwtToken:
         self._data.update({
             "exp": timegm((self._now + time_delta).timetuple())
         })
-        return jwt.encode(self._data, current_app.config['SECRET'], algorithm="HS256")
+        return jwt.encode(self._data, current_app.config['SECRET_KEY'], algorithm="HS256")
 
     @property
     def refresh_token(self) -> str:
-        return self._get_token(time_delta=timedelta(days=current_app.config['REFRESH_TOKEN_EXPIRATION']))
+        return self._get_token(time_delta=timedelta(days=current_app.config['TOKEN_EXPIRE_DAYS']))
 
     @property
     def access_token(self) -> str:
-        return self._get_token(time_delta=timedelta(minutes=current_app.config['ACCESS_TOKEN_EXPIRATION']))
+        return self._get_token(time_delta=timedelta(minutes=current_app.config['TOKEN_EXPIRE_MINUTES']))
 
     def get_tokens(self) -> Dict[str, str]:
         return {

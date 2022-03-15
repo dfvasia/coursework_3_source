@@ -24,11 +24,12 @@ class AuthView(Resource):
         try:
             validated_data = LoginValidator().load(request.json)
             user = UsersService(db.session).get_by_user_email(validated_data['email'])
+            print(user)
             if not user:
                 abort(404, message="User not found")
-            token_data = jwt.JwtSchema().load({'user_id': user.id, 'role': user.role_id})
+            token_data = jwt.JwtSchema().load({'user_id': user["id"], 'role': user["role_id"]})
             a = jwt.JwtToken(token_data).get_tokens()
-            b = UsersService(db.session).write_refresh_token(user.email, a["refresh_token"])
+            b = UsersService(db.session).write_refresh_token(user["email"], a["refresh_token"])
             print(b)
             return a
         except ValidationError as e:
@@ -57,7 +58,6 @@ class AuthRegisterView(Resource):
     def post(self):
         try:
             user_id = UsersService(db.session).create(**LoginValidator().load(request.json))
-            print(user_id)
             return {'id': user_id}, 201
         except ValidationError:
             raise BadRequest

@@ -26,7 +26,9 @@ class UserDAO:
     def write_refresh_token(self, email: str, refresh_token: str):
         user = self.get_by_user_email(email)
         user.refresh_token = refresh_token
-        return self._db_session(user)
+        self._db_session.add(user)
+        self._db_session.commit()
+        return user
 
     def update_password(self, email: str, password_hash: str):
         user = self.get_by_user_email(email)
@@ -44,7 +46,7 @@ class UserDAO:
             user = User(**data)
             self._db_session.add(user)
             self._db_session.commit()
-            return user
+            return user.id
         except sqlalchemy.exc.IntegrityError:
             raise DuplicateError
 
