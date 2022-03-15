@@ -42,10 +42,14 @@ class UserDAO:
     def create(self, data):
         try:
             user = User(**data)
-            return self._db_session(user)
+            self._db_session.add(user)
+            self._db_session.commit()
+            return user
         except sqlalchemy.exc.IntegrityError:
             raise DuplicateError
 
     def delete(self, uid):
         user = self.get_one(uid)
-        self._db_session(user)
+        self._db_session.delete(user)
+        self._db_session.commit()
+

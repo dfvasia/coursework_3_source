@@ -4,10 +4,12 @@ from marshmallow import ValidationError
 import project.tools as jwt
 from . import genres_ns
 
-from ..exceptions import ItemNotFound
+from ..exceptions import ItemNotFound, DuplicateError
 from ..schemas import LoginValidator
 from ..services import UsersService
 from project.setup_db import db
+from marshmallow import ValidationError
+from werkzeug.exceptions import BadRequest
 
 auth_ns = Namespace('auth')
 
@@ -45,3 +47,19 @@ class AuthView(Resource):
         except ValidationError as e:
             print(str(e))
             abort(400)
+
+
+@auth_ns.route('/register')
+class AuthRegisterView(Resource):
+    @genres_ns.response(201, "OK")
+    @genres_ns.response(404, "User not found")
+    @genres_ns.response(400, "Token not created")
+    def post(self):
+        try:
+            user_id = UsersService(db.session).create(**LoginValidator().load(request.json))
+            print(user_id)
+            return {'id': user_id}, 201
+        except ValidationError:
+            raise BadRequest
+        except DuplicateError:
+            raise BadRequest('Username already exists')

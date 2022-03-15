@@ -1,29 +1,29 @@
+from typing import Dict, Any
 
 from flask import request, Response
 from flask_restx import Resource, Namespace
 from marshmallow import ValidationError
 from werkzeug.exceptions import BadRequest
 
-from app.dao.models.user import UserSchema
-from app.tools.auth import login_required
-from app.tools.jwt_token import JwtSchema
-from app.views.auth import LoginValidator
-from container import user_service
-from exceptions import DuplicateError
-
 # users_ns = Namespace('users')
+from project.exceptions import DuplicateError
+from project.schemas import UserSchema, LoginValidator
+from project.services import UsersService
+from project.setup_db import db
+from project.tools import login_required
+
 user_ns = Namespace('user')
 
 
 @user_ns.route('/')
 class UserView(Resource):
     @login_required
-    def get(self, token_data):
-        return UserSchema().dump(user_service.get_one(token_data['user_id']))
+    def get(self, token_data: Dict[str, Any]):
+        return UserSchema().dump(UsersService(db.session).get_one(token_data['user_id']))
 
     def post(self):
         try:
-            user_id = user_service.create(**LoginValidator().load(request.json))
+            user_id = UsersService.create(**LoginValidator().load(request.json))
             return {'id': user_id}, 201
         except ValidationError:
             raise BadRequest
