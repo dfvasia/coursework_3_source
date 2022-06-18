@@ -21,14 +21,14 @@ python load_fixture
 
 ### Bash (Linux/MACOS)
 ```shell
-export FLASK_APP=run.py
+export FLASK_APP=app.py
 export FLASK_ENV='development'
 flask run
 ```
 
 ### CMD (Windows)
 ```shell
-set FLASK_APP=run.py
+set FLASK_APP=app.py
 set FLASK_ENV=development
 flask run
 ```
