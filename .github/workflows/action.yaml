@@ -9,4 +9,4 @@
         - name: clone code
           uses: actions/checkout@v2
         - name: debug 2
-          run: ls -la
+          run: ls -l
