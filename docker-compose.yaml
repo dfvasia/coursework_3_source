@@ -3,7 +3,8 @@ version: "3.9"
 
 services:
   app:
-    image: dfvasia/flask-app:version-1
+    build:
+      context: .
     ports:
       - "8080:80"
     volumes:
@@ -12,7 +13,8 @@ services:
       migrations:
         condition: service_completed_successfully
   migrations:
-    image: dfvasia/flask-app:version-1
+    build:
+      context: .
     volumes:
       - ./data:/project/data
     command: ls -la
