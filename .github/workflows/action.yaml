@@ -34,7 +34,7 @@
             source: "deploy/docker-compose.yaml"
             target: "flask-app"
             strip_components: 1
-        - name: docker-compose
+        - name: run docker-compose
           uses: appleboy/scp-action@master
           with:
             host: ${{ secrets.SSH_HOST }}
