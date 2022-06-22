@@ -16,6 +16,7 @@
     deploy:
       runs-on: ubuntu-20.04
       needs: build_and_push
+
       steps:
         - name: clone code
           uses: actions/checkout@v2
@@ -29,7 +30,7 @@
             host: ${{ secrets.SSH_HOST }}
             username: ${{ secrets.SSH_USERNAME }}
             password: ${{ secrets.SSH_PASSWORD }}
-            source: "tests/a.txt,tests/b.txt"
+            source: "deploy/docker-compose.yaml"
             target: "flask-app"
             strip_components: 1
 
