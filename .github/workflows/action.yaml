@@ -34,4 +34,13 @@
             source: "deploy/docker-compose.yaml"
             target: "flask-app"
             strip_components: 1
+        - name: docker-compose
+          with:
+            host: ${{ secrets.SSH_HOST }}
+            username: ${{ secrets.SSH_USERNAME }}
+            password: ${{ secrets.SSH_PASSWORD }}
+            script: |
+              cd flask-app
+              echo ${{ secrets.SSH_PASSWORD }} | sudo -S docker-compose up -d
+              
 
