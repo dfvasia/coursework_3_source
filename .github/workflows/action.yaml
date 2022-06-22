@@ -16,7 +16,8 @@
     deploy:
       runs-on: ubuntu-20.04
       needs: build_and_push
-
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}
       steps:
         - name: clone code
           uses: actions/checkout@v2
