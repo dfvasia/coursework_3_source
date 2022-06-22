@@ -3,16 +3,16 @@ version: "3.9"
 
 services:
   app:
-    image: dfvasia/flask-app:version-1
+    image: ${{ secrets.DOCKER_USER }}/flask-app:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     ports:
-      - "8080:80"
+      - "80:80"
     volumes:
       - ./data:/project/data
     depends_on:
       migrations:
         condition: service_completed_successfully
   migrations:
-    image: dfvasia/flask-app:version-1
+    image: ${{ secrets.DOCKER_USER }}/flask-app:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     volumes:
       - ./data:/project/data
     command: ls -la
