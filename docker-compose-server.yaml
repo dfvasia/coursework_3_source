@@ -8,4 +8,11 @@ services:
       - "80:80"
     volumes:
       - ./data:/project/data
+    depends_on:
+      migrations:
+        condition: service_completed_successfully
+  migrations:
+    image: $DOCKER_USER/flask-app:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    volumes:
+      - ./data:/project/data
     command: chmod +x run.sh
