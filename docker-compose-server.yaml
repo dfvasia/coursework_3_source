@@ -6,4 +6,4 @@ services:
     image: $DOCKER_USER/flask-app:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     ports:
       - "80:80"
-    command: chmod +x run.sh
+    command: ./run.sh
